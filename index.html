@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Coupon Reminder</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 30px auto; }
+    h1 { margin-bottom: 0.3rem; }
+    form { margin-bottom: 1.5rem; display: flex; gap: .5rem; flex-wrap: wrap; }
+    input { padding: .4rem; }
+    button { padding: .4rem .8rem; cursor: pointer; }
+    .coupon { margin-bottom: .5rem; padding: .5rem; border: 1px solid #ddd; border-radius: .4rem; }
+    .bad { color: #b00020; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Coupon Reminder 🍔</h1>
+  <p>Add restaurant coupons and see what’s about to expire.</p>
+
+  <form action="/add" method="post">
+    <input name="restaurant" placeholder="Restaurant" required>
+    <input name="coupon" placeholder="Coupon" required>
+    <input name="expires" placeholder="YYYY-MM-DD" required>
+    <button type="submit">Add</button>
+  </form>
+
+  <h2>Your Coupons</h2>
+  {% if coupons %}
+    {% for c in coupons %}
+      <div class="coupon">
+        <strong>{{ c.restaurant }}</strong> — {{ c.coupon }}  
+        <br>
+        Expires: {{ c.expires }}
+        {% if c.days_left is not none %}
+          {% if c.days_left < 0 %}
+            <span class="bad">(expired)</span>
+          {% elif c.days_left == 0 %}
+            <span class="bad">(today!)</span>
+          {% else %}
+            (in {{ c.days_left }} day{{ 's' if c.days_left != 1 else '' }})
+          {% endif %}
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No coupons yet.</p>
+  {% endif %}
+</body>
+</html>

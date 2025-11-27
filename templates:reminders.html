@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Expiring Soon</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 30px auto; }
+    .coupon { margin-bottom: .5rem; padding: .5rem; border: 1px solid #ddd; border-radius: .4rem; }
+    .bad { color: #b00020; font-weight: bold; }
+    .top-links { margin-bottom: 1rem; }
+    .top-links a { margin-right: .75rem; }
+  </style>
+</head>
+<body>
+  <div class="top-links">
+    <a href="/">← Back to Home</a>
+  </div>
+  <h1>Expiring Soon ⏰</h1>
+  <p>These coupons are expiring in the next few days.</p>
+
+  {% if coupons %}
+    {% for c in coupons %}
+      <div class="coupon">
+        <strong>{{ c.restaurant }}</strong> — {{ c.coupon }}  
+        <br>
+        Expires: {{ c.expires }}
+        {% if c.days_left == 0 %}
+          <span class="bad">(today!)</span>
+        {% else %}
+          (in {{ c.days_left }} day{{ 's' if c.days_left != 1 else '' }})
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No coupons are expiring soon 🎉</p>
+  {% endif %}
+</body>
+</html>
